@@ -216,7 +216,7 @@ class Image(object):
     
     @only_live
     def write(self, filename, format=None,  # @ReservedAssignment
-              compression=None, quality=None):
+              compression=None, quality=None, strip=False):
         """Write an image to filesystem.
            
            :param filename: file name to write to.
@@ -255,7 +255,11 @@ class Image(object):
             guard(self.__wand,
                   lambda: cdll.MagickSetImageCompressionQuality(self.__wand,
                                                                 quality))
-        
+
+        if strip:
+            guard(self.__wand,
+                  lambda: cdll.MagickStripImage(self.__wand))
+
         guard(self.__wand,
               lambda: cdll.MagickWriteImage(self.__wand, b(filename)))
         
